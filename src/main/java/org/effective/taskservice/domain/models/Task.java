@@ -16,10 +16,10 @@ import java.util.List;
 //        приоритет (например, "высокий", "средний", "низкий"), а также автора задачи и
 //        исполнителя. Реализовать необходимо только API.
 @Entity
-@Table(name = "task")
+@Table(schema = "entities", name = "task")
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
     @Column(name="header")

@@ -10,7 +10,6 @@
     </changeSet>
 
     <changeSet id="001-create-tables" author="dayaDanya">
-
         <createTable schemaName="entities" tableName="person">
 
             <column name="id" type="SERIAL">
@@ -53,6 +52,15 @@
             <column name="text" type="VARCHAR"/>
             <column name="creation_date" type="timestamp without time zone"/>
         </createTable>
+    </changeSet>
+    <changeSet id="001-alter-table-person" author="dayadanya">
+        <addColumn schemaName="entities" tableName="person">
+            <column name="email" type="varchar(255)"/>
+        </addColumn>
+        <addColumn schemaName="entities" tableName="person">
+            <column name="role" type="varchar(255)"/>
+        </addColumn>
+
     </changeSet>
 
 

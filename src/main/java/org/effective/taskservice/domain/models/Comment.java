@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
  * @author dayaDanya
  */
 @Entity
-@Table(name="comment")
+@Table(schema = "entities", name="comment")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
