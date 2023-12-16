@@ -14,9 +14,8 @@ public class Comment {
     @Column(name = "id")
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "commentator_id")
-    private Person commentator;
+    @Column(name = "user_id")
+    private long commentatorId;
 
     @ManyToOne
     @JoinColumn(name = "task_id")
@@ -29,9 +28,8 @@ public class Comment {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    public Comment(Person commentator, Task task, String text, LocalDateTime creationDate) {
-
-        this.commentator = commentator;
+    public Comment(long commentatorId, Task task, String text, LocalDateTime creationDate) {
+        this.commentatorId = commentatorId;
         this.task = task;
         this.text = text;
         this.creationDate = creationDate;

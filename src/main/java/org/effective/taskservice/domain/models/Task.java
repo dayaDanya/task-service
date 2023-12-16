@@ -1,12 +1,12 @@
 package org.effective.taskservice.domain.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.effective.taskservice.domain.enums.TaskPriority;
 import org.effective.taskservice.domain.enums.TaskStatus;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 /**
  * @author dayaDanya
@@ -17,6 +17,8 @@ import java.util.List;
 //        исполнителя. Реализовать необходимо только API.
 @Entity
 @Table(schema = "entities", name = "task")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,23 +41,10 @@ public class Task {
     @JoinColumn(name = "performer_id")
     private Person performer;
     @OneToMany(mappedBy = "task")
-    @Column(name = "comments")
     private List<Comment> comments;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
-
-    public Task(String header, String description, TaskStatus taskStatus,
-                TaskPriority taskPriority, Person author, Person performer) {
-        this.header = header;
-        this.description = description;
-        this.taskStatus = taskStatus;
-        this.taskPriority = taskPriority;
-        this.author = author;
-        this.performer = performer;
-        this.comments = new ArrayList<>();
-        this.creationDate = LocalDateTime.now();
-    }
 
     public long getId() {
         return id;
@@ -127,5 +116,20 @@ public class Task {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", header='" + header + '\'' +
+                ", description='" + description + '\'' +
+                ", taskStatus=" + taskStatus +
+                ", taskPriority=" + taskPriority +
+                ", author=" + author +
+                ", performer=" + performer +
+                ", comments=" + comments +
+                ", creationDate=" + creationDate +
+                '}';
     }
 }
