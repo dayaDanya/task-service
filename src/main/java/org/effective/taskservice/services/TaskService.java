@@ -14,15 +14,20 @@ import java.util.List;
 public class TaskService {
     private final TaskRepo taskRepo;
 
-    private final TaskMapper taskMapper;
 
     public TaskService(TaskRepo taskRepo) {
         this.taskRepo = taskRepo;
-        taskMapper = Mappers.getMapper(TaskMapper.class);
-    }
 
+    }
 
     public List<Task> findAll(){
         return taskRepo.findAll();
     }
+
+    public void save(Task task){
+        System.out.println(task.getCreationDate());
+        taskRepo.save(task);
+    }
+
+
 }

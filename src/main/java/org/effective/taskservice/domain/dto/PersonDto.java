@@ -9,14 +9,14 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonDto {
-    @JsonProperty("username")
-    private String username;
+    @JsonProperty("email")
+    private String email;
 
 
     @Override
     public String toString() {
         return "PersonDto{" +
-                "username='" + username + '\'' +
+                "email='" + email + '\'' +
                 '}';
     }
 }
