@@ -1,7 +1,9 @@
 package org.effective.taskservice.security.config;
 
 import lombok.RequiredArgsConstructor;
+import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.repositories.PersonRepo;
+import org.effective.taskservice.security.auth.PersonDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,8 +23,13 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            Person person = repository.findByEmail(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            return PersonDetails.builder()
+                    .person(person)
+                    .build();
+        };
     }
 
     @Bean

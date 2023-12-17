@@ -8,6 +8,7 @@ import org.effective.taskservice.security.config.JwtService;
 import org.effective.taskservice.security.dto.AuthenticationRequest;
 import org.effective.taskservice.security.dto.AuthenticationResponse;
 import org.effective.taskservice.security.dto.RegisterRequest;
+import org.effective.taskservice.util.ex.EmailNotUniqueException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,15 +24,20 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user =
-                Person.builder()
-                        .username(request.getLastname())
-                        .email(request.getEmail())
-                        .password(passwordEncoder.encode(request.getPassword()))
-                        .role(Role.USER)
+        if(repository.findByEmail(request.getEmail()).isPresent()){
+            throw new EmailNotUniqueException("Email is already used");
+        }
+        var userDetails =
+                PersonDetails.builder()
+                        .person(Person.builder()
+                                .username(request.getLastname())
+                                .email(request.getEmail())
+                                .password(passwordEncoder.encode(request.getPassword()))
+                                .role(Role.USER)
+                                .build())
                         .build();
-        repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        repository.save(userDetails.getPerson());
+        var jwtToken = jwtService.generateToken(userDetails);
         return new AuthenticationResponse(jwtToken);
     }
 
@@ -44,9 +50,11 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(PersonDetails.builder()
+                .person(user)
+                .build());
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .response(jwtToken)
                 .build();
     }
 
