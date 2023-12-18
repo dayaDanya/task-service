@@ -5,12 +5,12 @@ import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.services.PersonService;
 import org.effective.taskservice.services.TaskService;
+import org.effective.taskservice.util.ex.PersonNotFoundException;
 import org.effective.taskservice.util.mappers.TaskMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,27 +42,22 @@ public class TaskController {
     public List<Task> tasks(){
         return taskService.findAll();
     }
-    //json format
-    // {
-    // "header" : "",
-    // "description" : "",
-    // "taskStatus" : "",
-    // "taskPriority" : "",
-    // "author" : "", (здесь id)
-    // "performer" : "" (здесь id)
-    // }
     @PostMapping("/tasks")
     public ResponseEntity<HttpStatus> createTask(@RequestBody TaskDto taskDto){
         System.out.println(taskDto.toString());
         Person author =
                 personService.findByEmail(
                         taskDto.getAuthor().getEmail())
-                        .orElseThrow();
+                        .orElseThrow(() ->
+                                new PersonNotFoundException("Person(author) " +
+                                        "with this email not found"));
 
         Person performer =
                 personService.findByEmail(
                                 taskDto.getPerformer().getEmail())
-                        .orElseThrow();
+                        .orElseThrow(() ->
+                                new PersonNotFoundException("Person(performer) " +
+                                        "with this email not found"));
         Task task = taskMapper.dtoToObj(taskDto);
         task.setAuthor(author);
         task.setPerformer(performer);
