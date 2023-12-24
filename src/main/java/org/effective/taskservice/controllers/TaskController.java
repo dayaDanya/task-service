@@ -2,19 +2,19 @@ package org.effective.taskservice.controllers;
 
 import org.effective.taskservice.domain.dto.TaskDto;
 import org.effective.taskservice.domain.dto.TaskOutputDto;
-import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.services.PersonService;
 import org.effective.taskservice.services.TaskService;
 import org.effective.taskservice.util.ex.PersonNotFoundException;
+import org.effective.taskservice.util.ex.TaskNotFoundException;
 import org.effective.taskservice.util.mappers.TaskMapper;
+import org.effective.taskservice.util.mappers.TaskOutputMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,28 +29,41 @@ public class TaskController {
 
     private final TaskMapper taskMapper;
 
+    private final TaskOutputMapper taskOutputMapper;
+
     @Autowired
     public TaskController(TaskService taskService, PersonService personService) {
         this.taskService = taskService;
         this.personService = personService;
+        taskOutputMapper = Mappers.getMapper(TaskOutputMapper.class);
         taskMapper = Mappers.getMapper(TaskMapper.class);
     }
 
     @GetMapping("/tasks")
-    public List<Task> tasks(){
+    public List<Task> tasks() {
         return taskService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HttpStatus> findTask(@PathVariable("id") long id){
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<TaskOutputDto> getTask(@PathVariable("id") long id) {
+        try {
+            Task task = taskService.findById(id);
+            TaskOutputDto taskOutputDto = taskOutputMapper.objToDto(task);
+            return new ResponseEntity<>(taskOutputDto, HttpStatus.OK);
+        } catch (TaskNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
+
     @PostMapping()
-    public ResponseEntity<HttpStatus> createTask(@RequestBody TaskDto taskDto) throws PersonNotFoundException{
+    public ResponseEntity<HttpStatus> createTask(@RequestBody TaskDto taskDto) {
         System.out.println(taskDto.toString());
         Task task = taskMapper.dtoToObj(taskDto);
-
-        taskService.save(task);
+        try {
+            taskService.save(task);
+        } catch (PersonNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

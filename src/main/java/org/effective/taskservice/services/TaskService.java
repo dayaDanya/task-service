@@ -42,7 +42,7 @@ public class TaskService {
         taskRepo.save(task);
     }
 
-    public Task findById(long id){
+    public Task findById(long id) throws TaskNotFoundException{
         return taskRepo.findById(id).orElseThrow(TaskNotFoundException::new);
     }
 
