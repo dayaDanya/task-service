@@ -13,6 +13,8 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +46,18 @@ public class TaskController {
         return taskService.findAll();
     }
 
+    @PostMapping()
+    public ResponseEntity<HttpStatus> createTask(@RequestBody TaskDto taskDto) {
+        System.out.println(taskDto.toString());
+        Task task = taskMapper.dtoToObj(taskDto);
+        try {
+            taskService.save(task);
+        } catch (PersonNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TaskOutputDto> getTask(@PathVariable("id") long id) {
         try {
@@ -55,16 +69,21 @@ public class TaskController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<HttpStatus> createTask(@RequestBody TaskDto taskDto) {
-        System.out.println(taskDto.toString());
-        Task task = taskMapper.dtoToObj(taskDto);
+    @DeleteMapping("{id}")
+    public ResponseEntity<HttpStatus> deleteTask(@PathVariable("id") long id) {
         try {
-            taskService.save(task);
-        } catch (PersonNotFoundException e) {
+            taskService.findById(id);
+            Authentication authentication = SecurityContextHolder
+                    .getContext().getAuthentication();
+            System.out.println(authentication.getName());
+            if (taskService.findById(id).getAuthor().getEmail().equals(authentication.getName())) {
+                taskService.delete(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } catch (TaskNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }
