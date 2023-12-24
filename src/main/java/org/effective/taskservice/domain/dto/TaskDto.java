@@ -1,9 +1,14 @@
 package org.effective.taskservice.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import org.effective.taskservice.domain.enums.TaskPriority;
 import org.effective.taskservice.domain.enums.TaskStatus;
-
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskDto {
 
     private String header;

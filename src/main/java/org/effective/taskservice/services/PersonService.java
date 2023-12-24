@@ -2,6 +2,7 @@ package org.effective.taskservice.services;
 
 import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.repositories.PersonRepo;
+import org.effective.taskservice.util.ex.PersonNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,7 +15,9 @@ public class PersonService {
         this.personRepo = personRepo;
     }
 
-    public Optional<Person> findByEmail(String email) {
-        return personRepo.findByEmail(email);
+    public Person findByEmail(String email) {
+        return personRepo.findByEmail(email).orElseThrow(() ->
+                new PersonNotFoundException("Person(author) " +
+                "with this email not found"));
     }
 }
