@@ -5,6 +5,7 @@ import org.effective.taskservice.domain.dto.TaskDto;
 import org.effective.taskservice.domain.dto.TaskOutputDto;
 import org.effective.taskservice.domain.models.Comment;
 import org.effective.taskservice.domain.models.Task;
+import org.effective.taskservice.services.CommentService;
 import org.effective.taskservice.services.PersonService;
 import org.effective.taskservice.services.TaskService;
 import org.effective.taskservice.util.ex.PersonNotFoundException;
@@ -32,6 +33,8 @@ public class TaskController {
 
     private final PersonService personService;
 
+    private final CommentService commentService;
+
     private final TaskMapper taskMapper;
 
     private final TaskOutputMapper taskOutputMapper;
@@ -39,9 +42,10 @@ public class TaskController {
     private final CommentMapper commentMapper;
 
     @Autowired
-    public TaskController(TaskService taskService, PersonService personService) {
+    public TaskController(TaskService taskService, PersonService personService, CommentService commentService) {
         this.taskService = taskService;
         this.personService = personService;
+        this.commentService = commentService;
         taskOutputMapper = Mappers.getMapper(TaskOutputMapper.class);
         taskMapper = Mappers.getMapper(TaskMapper.class);
         commentMapper = Mappers.getMapper(CommentMapper.class);
@@ -94,19 +98,22 @@ public class TaskController {
         }
     }
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<HttpStatus> addComment(@PathVariable("id") long id,
-//                                                 @RequestBody CommentDto commentDto) {
-//        try {
-//            taskService.findById(id);
-//            Authentication authentication = SecurityContextHolder
-//                    .getContext().getAuthentication();
-//            Comment comment = commentMapper.dtoToObj(commentDto);
-//            comment.setCommentatorId(authentication.getDetails());
-//        } catch (TaskNotFoundException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<HttpStatus> addComment(@PathVariable("id") long id,
+                                                 @RequestBody CommentDto commentDto) {
+        try {
+            Task task = taskService.findById(id);
+            Authentication authentication = SecurityContextHolder
+                    .getContext().getAuthentication();
+            Comment comment = commentMapper.dtoToObj(commentDto);
+            comment.setAuthorEmail(authentication.getName());
+            comment.setTask(task);
+            commentService.save(comment);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (TaskNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
 
 }

@@ -25,6 +25,8 @@ import java.util.List;
 @Entity
 @Table(schema = "entities", name="person")
 public class Person {
+
+    //TODO настроить каскадирование
     /**
      * id пользователя
      */
