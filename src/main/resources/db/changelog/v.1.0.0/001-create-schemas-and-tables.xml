@@ -62,6 +62,15 @@
         </addColumn>
 
     </changeSet>
+    <changeSet id="001-alter-table-comment" author="dayadanya">
+        <dropColumn schemaName="entities" tableName="comment">
+            <column name="user_id"/>
+        </dropColumn>
+        <addColumn schemaName="entities" tableName="comment">
+            <column name="author_email" type="varchar(255)"/>
+        </addColumn>
+
+    </changeSet>
 
 
 

@@ -1,12 +1,15 @@
 package org.effective.taskservice.controllers;
 
+import org.effective.taskservice.domain.dto.CommentDto;
 import org.effective.taskservice.domain.dto.TaskDto;
 import org.effective.taskservice.domain.dto.TaskOutputDto;
+import org.effective.taskservice.domain.models.Comment;
 import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.services.PersonService;
 import org.effective.taskservice.services.TaskService;
 import org.effective.taskservice.util.ex.PersonNotFoundException;
 import org.effective.taskservice.util.ex.TaskNotFoundException;
+import org.effective.taskservice.util.mappers.CommentMapper;
 import org.effective.taskservice.util.mappers.TaskMapper;
 import org.effective.taskservice.util.mappers.TaskOutputMapper;
 import org.mapstruct.factory.Mappers;
@@ -33,12 +36,15 @@ public class TaskController {
 
     private final TaskOutputMapper taskOutputMapper;
 
+    private final CommentMapper commentMapper;
+
     @Autowired
     public TaskController(TaskService taskService, PersonService personService) {
         this.taskService = taskService;
         this.personService = personService;
         taskOutputMapper = Mappers.getMapper(TaskOutputMapper.class);
         taskMapper = Mappers.getMapper(TaskMapper.class);
+        commentMapper = Mappers.getMapper(CommentMapper.class);
     }
 
     @GetMapping("/tasks")
@@ -46,6 +52,7 @@ public class TaskController {
         return taskService.findAll();
     }
 
+    //TODO переделать json и сделать так чтобы author брался из аутентификации
     @PostMapping()
     public ResponseEntity<HttpStatus> createTask(@RequestBody TaskDto taskDto) {
         System.out.println(taskDto.toString());
@@ -58,6 +65,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    //TODO добавить еще один ид
     @GetMapping("/{id}")
     public ResponseEntity<TaskOutputDto> getTask(@PathVariable("id") long id) {
         try {
@@ -69,7 +77,7 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTask(@PathVariable("id") long id) {
         try {
             taskService.findById(id);
@@ -85,5 +93,20 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<HttpStatus> addComment(@PathVariable("id") long id,
+//                                                 @RequestBody CommentDto commentDto) {
+//        try {
+//            taskService.findById(id);
+//            Authentication authentication = SecurityContextHolder
+//                    .getContext().getAuthentication();
+//            Comment comment = commentMapper.dtoToObj(commentDto);
+//            comment.setCommentatorId(authentication.getDetails());
+//        } catch (TaskNotFoundException e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//
+//    }
 
 }

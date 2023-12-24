@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDto {
-    @JsonProperty("commentatorId")
-    private long commentatorId;
+    @JsonProperty("authorEmail")
+    private String authorEmail;
     @JsonProperty("text")
     private String text;
     @JsonProperty("creationDate")

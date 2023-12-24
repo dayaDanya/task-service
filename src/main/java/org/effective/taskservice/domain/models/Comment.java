@@ -23,9 +23,8 @@ public class Comment {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "user_id")
-    @JsonProperty("commentatorId")
-    private long commentatorId;
+    @Column(name = "author_email")
+    private String authorEmail;
 
     @ManyToOne
     @JoinColumn(name = "task_id")
