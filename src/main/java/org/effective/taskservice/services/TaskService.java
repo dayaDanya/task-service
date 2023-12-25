@@ -1,5 +1,6 @@
 package org.effective.taskservice.services;
 
+import org.effective.taskservice.domain.enums.TaskPriority;
 import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.repositories.TaskRepo;
@@ -17,13 +18,14 @@ public class TaskService {
     private final TaskRepo taskRepo;
 
     private final PersonService personService;
+
     public TaskService(TaskRepo taskRepo, PersonService personService) {
         this.taskRepo = taskRepo;
 
         this.personService = personService;
     }
 
-    public List<Task> findAll(){
+    public List<Task> findAll() {
         return taskRepo.findAll();
     }
 
@@ -42,12 +44,12 @@ public class TaskService {
         taskRepo.save(task);
     }
 
-    public Task findById(long id) throws TaskNotFoundException{
+    public Task findById(long id) throws TaskNotFoundException {
         return taskRepo.findById(id).orElseThrow(TaskNotFoundException::new);
     }
-    public void delete(long id){
+
+    public void delete(long id) {
         taskRepo.deleteById(id);
     }
-
 
 }

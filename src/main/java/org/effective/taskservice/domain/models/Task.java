@@ -40,7 +40,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "performer_id")
     private Person performer;
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", orphanRemoval = true)
     private List<Comment> comments;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")

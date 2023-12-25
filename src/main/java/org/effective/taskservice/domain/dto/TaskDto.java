@@ -18,58 +18,12 @@ public class TaskDto {
     private TaskStatus taskStatus;
 
     private TaskPriority taskPriority;
-    @JsonProperty("author")
+    //в json не передается. берется из authentication.
     private PersonDto author;
     @JsonProperty("performer")
     private PersonDto performer;
 
-    public String getHeader() {
-        return header;
-    }
 
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public TaskStatus getTaskStatus() {
-        return taskStatus;
-    }
-
-    public void setTaskStatus(TaskStatus taskStatus) {
-        this.taskStatus = taskStatus;
-    }
-
-    public TaskPriority getTaskPriority() {
-        return taskPriority;
-    }
-
-    public void setTaskPriority(TaskPriority taskPriority) {
-        this.taskPriority = taskPriority;
-    }
-
-    public PersonDto getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(PersonDto author) {
-        this.author = author;
-    }
-
-    public PersonDto getPerformer() {
-        return performer;
-    }
-
-    public void setPerformer(PersonDto performer) {
-        this.performer = performer;
-    }
 
     @Override
     public String toString() {

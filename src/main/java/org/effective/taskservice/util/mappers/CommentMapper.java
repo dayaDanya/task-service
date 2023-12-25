@@ -11,6 +11,6 @@ public interface CommentMapper {
     @Mapping(source = "comment.text", target = "text")
     CommentDto objToDto(Comment comment);
     @Mapping(source = "commentDto.id", target = "id")
-    @Mapping(source = "comment.text", target = "text")
+    @Mapping(source = "commentDto.text", target = "text")
     Comment dtoToObj(CommentDto commentDto);
 }
