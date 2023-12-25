@@ -3,8 +3,7 @@ package org.effective.taskservice.controllers;
 import org.effective.taskservice.domain.dto.CommentDto;
 import org.effective.taskservice.domain.dto.PersonDto;
 import org.effective.taskservice.domain.dto.TaskDto;
-import org.effective.taskservice.domain.dto.TaskOutputDto;
-import org.effective.taskservice.domain.enums.TaskStatus;
+import org.effective.taskservice.domain.dto.TaskOutDto;
 import org.effective.taskservice.domain.models.Comment;
 import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.services.CommentService;
@@ -14,7 +13,7 @@ import org.effective.taskservice.util.ex.PersonNotFoundException;
 import org.effective.taskservice.util.ex.TaskNotFoundException;
 import org.effective.taskservice.util.mappers.CommentMapper;
 import org.effective.taskservice.util.mappers.TaskMapper;
-import org.effective.taskservice.util.mappers.TaskOutputMapper;
+import org.effective.taskservice.util.mappers.TaskOutMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author dayaDanya
@@ -39,7 +39,7 @@ public class TaskController {
 
     private final TaskMapper taskMapper;
 
-    private final TaskOutputMapper taskOutputMapper;
+    private final TaskOutMapper taskOutputMapper;
 
     private final CommentMapper commentMapper;
 
@@ -48,14 +48,32 @@ public class TaskController {
         this.taskService = taskService;
         this.personService = personService;
         this.commentService = commentService;
-        taskOutputMapper = Mappers.getMapper(TaskOutputMapper.class);
+        taskOutputMapper = Mappers.getMapper(TaskOutMapper.class);
         taskMapper = Mappers.getMapper(TaskMapper.class);
         commentMapper = Mappers.getMapper(CommentMapper.class);
     }
 
-    @GetMapping("/tasks")
-    public List<Task> tasks() {
-        return taskService.findAll();
+    @GetMapping()
+    public List<TaskOutDto> tasks() {
+        return taskService.findAll()
+                .stream()
+                .map(taskOutputMapper::objToDto)
+                .collect(Collectors.toList());
+    }
+    //todo продумать другие варианты поиска
+    @GetMapping("/author/{id}")
+    public List<TaskOutDto> tasksByAuthorId(@PathVariable("id") long id){
+        return taskService.findByAuthorId(id)
+                .stream()
+                .map(taskOutputMapper::objToDto)
+                .collect(Collectors.toList());
+    }
+    @GetMapping("/performer/{id}")
+    public List<TaskOutDto> tasksByPerformerId(@PathVariable("id") long id){
+        return taskService.findByPerformerId(id)
+                .stream()
+                .map(taskOutputMapper::objToDto)
+                .collect(Collectors.toList());
     }
 
     //здесь в dto есть author, однако мы его игнорируем и берем из аутентификации
@@ -75,10 +93,10 @@ public class TaskController {
 
     //TODO добавить еще один ид
     @GetMapping("/{id}")
-    public ResponseEntity<TaskOutputDto> getTask(@PathVariable("id") long id) {
+    public ResponseEntity<TaskOutDto> getTask(@PathVariable("id") long id) {
         try {
             Task task = taskService.findById(id);
-            TaskOutputDto taskOutputDto = taskOutputMapper.objToDto(task);
+            TaskOutDto taskOutputDto = taskOutputMapper.objToDto(task);
             return new ResponseEntity<>(taskOutputDto, HttpStatus.OK);
         } catch (TaskNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -136,7 +154,8 @@ public class TaskController {
             Authentication authentication = SecurityContextHolder
                     .getContext().getAuthentication();
             Comment comment = commentMapper.dtoToObj(commentDto);
-            comment.setAuthorEmail(authentication.getName());
+            comment.setAuthor(authentication.getName());
+            System.out.println(comment.getAuthor() + "\n");
             comment.setTask(task);
             commentService.save(comment);
             return new ResponseEntity<>(HttpStatus.CREATED);

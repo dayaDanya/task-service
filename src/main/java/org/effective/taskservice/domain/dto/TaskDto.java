@@ -20,7 +20,6 @@ public class TaskDto {
     private TaskPriority taskPriority;
     //в json не передается. берется из authentication.
     private PersonDto author;
-    @JsonProperty("performer")
     private PersonDto performer;
 
 

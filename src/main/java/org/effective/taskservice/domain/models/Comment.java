@@ -24,7 +24,7 @@ public class Comment {
     private long id;
 
     @Column(name = "author_email")
-    private String authorEmail;
+    private String author;
 
     @ManyToOne
     @JoinColumn(name = "task_id")

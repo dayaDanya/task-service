@@ -51,5 +51,12 @@ public class TaskService {
     public void delete(long id) {
         taskRepo.deleteById(id);
     }
+    //TODO проверить исключения
+    public List<Task> findByAuthorId(long id){
+        return taskRepo.findByAuthorId(id);
+    }
+    public List<Task> findByPerformerId(long id){
+        return taskRepo.findByPerformerId(id);
+    }
 
 }

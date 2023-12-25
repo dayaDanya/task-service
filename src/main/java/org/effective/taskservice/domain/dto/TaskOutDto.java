@@ -5,6 +5,7 @@ import lombok.*;
 import org.effective.taskservice.domain.enums.TaskPriority;
 import org.effective.taskservice.domain.enums.TaskStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskOutputDto {
+public class TaskOutDto {
     private String header;
 
     private String description;
@@ -20,11 +21,13 @@ public class TaskOutputDto {
     private TaskStatus taskStatus;
 
     private TaskPriority taskPriority;
-    @JsonProperty("author")
+
     private PersonDto author;
-    @JsonProperty("performer")
+
     private PersonDto performer;
 
-    private List<CommentDto> comments;
+    private List<CommentOutDto> comments;
+
+    private LocalDateTime creationDate;
 
 }

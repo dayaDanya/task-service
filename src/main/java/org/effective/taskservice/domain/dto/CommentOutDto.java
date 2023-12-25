@@ -2,15 +2,21 @@ package org.effective.taskservice.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto {
+public class CommentOutDto {
 
-    private String text;
+    private long id;
 
     private String author;
 
+    private String text;
+
+    private LocalDateTime creationDate;
 }
