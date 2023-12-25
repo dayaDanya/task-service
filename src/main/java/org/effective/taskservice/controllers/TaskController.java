@@ -113,7 +113,28 @@ public class TaskController {
         } catch (TaskNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @DeleteMapping("/{id}/{cid}")
+    public ResponseEntity<HttpStatus> deleteComment(@PathVariable("id") long id,
+                                                    @PathVariable("cid") long cid) {
+        try {
+            taskService.findById(id);
+        } catch (TaskNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Authentication authentication = SecurityContextHolder
+                .getContext().getAuthentication();
+        try {
+            if (commentService.findAuthorEmailById(cid).equals(authentication.getName())) {
+                commentService.delete(cid);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } catch (PersonNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

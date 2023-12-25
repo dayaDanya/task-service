@@ -16,8 +16,6 @@ public class PersonService {
     }
 
     public Person findByEmail(String email) {
-        return personRepo.findByEmail(email).orElseThrow(() ->
-                new PersonNotFoundException("Person(author) " +
-                "with this email not found"));
+        return personRepo.findByEmail(email).orElseThrow(PersonNotFoundException::new);
     }
 }
