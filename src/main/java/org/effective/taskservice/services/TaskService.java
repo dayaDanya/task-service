@@ -6,10 +6,13 @@ import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.repositories.TaskRepo;
 import org.effective.taskservice.util.ex.PersonNotFoundException;
 import org.effective.taskservice.util.ex.TaskNotFoundException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 /**
  * @author dayaDanya
  */
@@ -25,8 +28,8 @@ public class TaskService {
         this.personService = personService;
     }
 
-    public List<Task> findAll() {
-        return taskRepo.findAll();
+    public Slice<Task> findAllSlice(Pageable pageable) {
+        return taskRepo.findAllSlice(pageable);
     }
 
     public void save(Task task) throws PersonNotFoundException {
@@ -51,12 +54,14 @@ public class TaskService {
     public void delete(long id) {
         taskRepo.deleteById(id);
     }
+
     //TODO проверить исключения
-    public List<Task> findByAuthorId(long id){
-        return taskRepo.findByAuthorId(id);
+    public Slice<Task> findByAuthorId(long id, Pageable pageable) {
+        return taskRepo.findByAuthorId(id, pageable);
     }
-    public List<Task> findByPerformerId(long id){
-        return taskRepo.findByPerformerId(id);
+
+    public Slice<Task> findByPerformerId(long id, Pageable pageable) {
+        return taskRepo.findByPerformerId(id, pageable);
     }
 
 }

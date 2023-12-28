@@ -16,6 +16,8 @@ import org.effective.taskservice.util.mappers.TaskMapper;
 import org.effective.taskservice.util.mappers.TaskOutMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -53,27 +55,37 @@ public class TaskController {
         commentMapper = Mappers.getMapper(CommentMapper.class);
     }
 
+    //todo пагинация и сортировка
     @GetMapping()
-    public List<TaskOutDto> tasks() {
-        return taskService.findAll()
-                .stream()
-                .map(taskOutputMapper::objToDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<Slice<TaskOutDto>> tasks(
+            @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+        return new ResponseEntity<>(taskService
+                .findAllSlice(PageRequest.of(offset, limit))
+                .map(taskOutputMapper::objToDto), HttpStatus.OK);
     }
+
     //todo продумать другие варианты поиска
     @GetMapping("/author/{id}")
-    public List<TaskOutDto> tasksByAuthorId(@PathVariable("id") long id){
-        return taskService.findByAuthorId(id)
-                .stream()
-                .map(taskOutputMapper::objToDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<Slice<TaskOutDto>> tasksByAuthorId(
+            @PathVariable("id") long id,
+            @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+        Slice<TaskOutDto> tasks = taskService
+                .findByAuthorId(id, PageRequest.of(offset, limit))
+                .map(taskOutputMapper::objToDto);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
+
     @GetMapping("/performer/{id}")
-    public List<TaskOutDto> tasksByPerformerId(@PathVariable("id") long id){
-        return taskService.findByPerformerId(id)
-                .stream()
-                .map(taskOutputMapper::objToDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<Slice<TaskOutDto>> tasksByPerformerId(
+            @PathVariable("id") long id,
+            @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+            @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+        Slice<TaskOutDto> tasks = taskService
+                .findByPerformerId(id, PageRequest.of(offset, limit))
+                .map(taskOutputMapper::objToDto);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     //здесь в dto есть author, однако мы его игнорируем и берем из аутентификации
@@ -122,7 +134,7 @@ public class TaskController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> changeTask(@PathVariable("id") long id,
-                                                   @RequestBody TaskDto taskDto) {
+                                                 @RequestBody TaskDto taskDto) {
         try {
             Task task = taskService.findById(id);
             Authentication authentication = SecurityContextHolder
@@ -131,13 +143,11 @@ public class TaskController {
             if (task.getAuthor().getEmail().equals(authentication.getName())) {
                 taskService.save(changedTask);
                 return new ResponseEntity<>(HttpStatus.OK);
-            }
-            else if(task.getPerformer().getEmail().equals(authentication.getName())){
+            } else if (task.getPerformer().getEmail().equals(authentication.getName())) {
                 task.setTaskStatus(changedTask.getTaskStatus());
                 taskService.save(task);
                 return new ResponseEntity<>(HttpStatus.OK);
-            }
-                else
+            } else
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } catch (TaskNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
