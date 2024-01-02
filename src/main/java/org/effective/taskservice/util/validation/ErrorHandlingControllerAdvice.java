@@ -47,27 +47,29 @@ public class ErrorHandlingControllerAdvice {
                 .collect(Collectors.toList());
         return new ValidationErrorResponse(violations);
     }
-    //todo зарефакторить следующие методы
+
     @ExceptionHandler(EmailNotUniqueException.class)
-    public ResponseEntity<AuthenticationResponse> onEmailNotFoundException(
+    public ResponseEntity<Violation> onEmailNotFoundException(
             EmailNotUniqueException e
     ) {
         System.out.println(e.getErrorMessageWithField());
-        return new ResponseEntity<>(new AuthenticationResponse(e.getErrorMessageWithField()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Violation("email", e.getErrorMessageWithField()), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(PersonNotFoundException.class)
-    public ResponseEntity<AuthenticationResponse> onPersonNotFoundException(
+    public ResponseEntity<Violation> onPersonNotFoundException(
             PersonNotFoundException e
     ) {
         System.out.println(e.getErrorMessageWithField());
-        return new ResponseEntity<>(new AuthenticationResponse(e.getErrorMessageWithField()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Violation("email", e.getErrorMessageWithField()), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<AuthenticationResponse> onTaskNotFoundException(
+    public ResponseEntity<Violation> onTaskNotFoundException(
             TaskNotFoundException e
     ) {
         System.out.println(e.getMessage());
-        return new ResponseEntity<>(new AuthenticationResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Violation("taskId", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 }
