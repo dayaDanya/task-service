@@ -1,17 +1,15 @@
 package org.effective.taskservice.services;
 
-import org.effective.taskservice.domain.enums.TaskPriority;
 import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.repositories.TaskRepo;
-import org.effective.taskservice.util.ex.PersonNotFoundException;
-import org.effective.taskservice.util.ex.TaskNotFoundException;
+import org.effective.taskservice.util.exceptions.PersonNotFoundException;
+import org.effective.taskservice.util.exceptions.TaskNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author dayaDanya

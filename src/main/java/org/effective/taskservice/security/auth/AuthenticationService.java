@@ -8,7 +8,8 @@ import org.effective.taskservice.security.config.JwtService;
 import org.effective.taskservice.security.dto.AuthenticationRequest;
 import org.effective.taskservice.security.dto.AuthenticationResponse;
 import org.effective.taskservice.security.dto.RegisterRequest;
-import org.effective.taskservice.util.ex.EmailNotUniqueException;
+import org.effective.taskservice.util.exceptions.EmailNotUniqueException;
+import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,12 +26,12 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         if(repository.findByEmail(request.getEmail()).isPresent()){
-            throw new EmailNotUniqueException("Email is already used");
+            throw new EmailNotUniqueException(request.getEmail());
         }
         var userDetails =
                 PersonDetails.builder()
                         .person(Person.builder()
-                                .username(request.getLastname())
+                                .username(request.getUsername())
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(Role.USER)
@@ -42,14 +43,15 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+
+        var user = repository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new PersonNotFoundException(request.getEmail()));
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
         var jwtToken = jwtService.generateToken(PersonDetails.builder()
                 .person(user)
                 .build());

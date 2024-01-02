@@ -1,5 +1,6 @@
 package org.effective.taskservice.controllers;
 
+import jakarta.validation.Valid;
 import org.effective.taskservice.domain.dto.CommentDto;
 import org.effective.taskservice.domain.dto.PersonDto;
 import org.effective.taskservice.domain.dto.TaskDto;
@@ -9,8 +10,8 @@ import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.services.CommentService;
 import org.effective.taskservice.services.PersonService;
 import org.effective.taskservice.services.TaskService;
-import org.effective.taskservice.util.ex.PersonNotFoundException;
-import org.effective.taskservice.util.ex.TaskNotFoundException;
+import org.effective.taskservice.util.exceptions.PersonNotFoundException;
+import org.effective.taskservice.util.exceptions.TaskNotFoundException;
 import org.effective.taskservice.util.mappers.CommentMapper;
 import org.effective.taskservice.util.mappers.TaskMapper;
 import org.effective.taskservice.util.mappers.TaskOutMapper;
@@ -23,9 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author dayaDanya
@@ -90,7 +88,7 @@ public class TaskController {
 
     //здесь в dto есть author, однако мы его игнорируем и берем из аутентификации
     @PostMapping()
-    public ResponseEntity<HttpStatus> createTask(@RequestBody TaskDto taskDto) {
+    public ResponseEntity<HttpStatus> createTask(@Valid @RequestBody TaskDto taskDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //so-so
         taskDto.setAuthor(new PersonDto(authentication.getName()));
@@ -134,7 +132,7 @@ public class TaskController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> changeTask(@PathVariable("id") long id,
-                                                 @RequestBody TaskDto taskDto) {
+                                                 @Valid @RequestBody TaskDto taskDto) {
         try {
             Task task = taskService.findById(id);
             Authentication authentication = SecurityContextHolder
@@ -157,9 +155,8 @@ public class TaskController {
     //todo добавить валидацию(проверку на правильность входящих dto)
     @PatchMapping("/{id}/comments")
     public ResponseEntity<HttpStatus> addComment(@PathVariable("id") long id,
-                                                 @RequestBody CommentDto commentDto) {
+                                                 @Valid @RequestBody CommentDto commentDto) {
         try {
-            System.out.println("\nмы там где NE надо\n");
             Task task = taskService.findById(id);
             Authentication authentication = SecurityContextHolder
                     .getContext().getAuthentication();

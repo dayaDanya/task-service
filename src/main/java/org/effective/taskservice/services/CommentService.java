@@ -2,7 +2,7 @@ package org.effective.taskservice.services;
 
 import org.effective.taskservice.domain.models.Comment;
 import org.effective.taskservice.repositories.CommentRepo;
-import org.effective.taskservice.util.ex.PersonNotFoundException;
+import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +24,6 @@ public class CommentService {
     }
     public String findAuthorEmailById(long id){
         return commentRepo.findAuthorEmailById(id)
-                .orElseThrow(PersonNotFoundException::new);
+                .orElseThrow(() -> new PersonNotFoundException(id));
     }
 }

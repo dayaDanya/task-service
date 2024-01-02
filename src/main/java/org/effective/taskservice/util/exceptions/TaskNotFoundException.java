@@ -1,4 +1,4 @@
-package org.effective.taskservice.util.ex;
+package org.effective.taskservice.util.exceptions;
 
 public class TaskNotFoundException extends RuntimeException{
     public TaskNotFoundException() {

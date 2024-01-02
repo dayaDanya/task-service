@@ -1,10 +1,13 @@
 package org.effective.taskservice.security.auth;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.effective.taskservice.security.dto.AuthenticationRequest;
 import org.effective.taskservice.security.dto.AuthenticationResponse;
 import org.effective.taskservice.security.dto.RegisterRequest;
-import org.effective.taskservice.util.ex.EmailNotUniqueException;
+import org.effective.taskservice.util.exceptions.EmailNotUniqueException;
+import org.effective.taskservice.util.exceptions.PersonNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,21 +24,21 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request) {
-        try {
-            AuthenticationResponse response = service.register(request);
-            return ResponseEntity.ok(response);
-        } catch (EmailNotUniqueException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
+            @Valid @RequestBody RegisterRequest request) {
+        AuthenticationResponse response = service.register(request);
+        return ResponseEntity.ok(response);
 
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+            @Valid @RequestBody AuthenticationRequest request
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+
+            System.out.println("we r here");
+            AuthenticationResponse response = service.authenticate(request);
+            return ResponseEntity.ok(response);
+
+
     }
 }
