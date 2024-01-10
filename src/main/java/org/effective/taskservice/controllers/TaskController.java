@@ -1,5 +1,7 @@
 package org.effective.taskservice.controllers;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.effective.taskservice.domain.dto.CommentDto;
 import org.effective.taskservice.domain.dto.PersonDto;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author dayaDanya
  */
+@Tag(name="TaskController", description="Контроллер предоставляющий эндпоинты для взаимодействие с записями Task")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -53,8 +56,9 @@ public class TaskController {
         commentMapper = Mappers.getMapper(CommentMapper.class);
     }
 
-    //todo пагинация и сортировка
-    @GetMapping()
+    //todo фильтрация
+    @SecurityRequirement(name = "JWT")
+    @GetMapping
     public ResponseEntity<Slice<TaskOutDto>> tasks(
             @RequestParam(value = "offset", defaultValue = "0") Integer offset,
             @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
@@ -64,6 +68,7 @@ public class TaskController {
     }
 
     //todo продумать другие варианты поиска
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/author/{id}")
     public ResponseEntity<Slice<TaskOutDto>> tasksByAuthorId(
             @PathVariable("id") long id,
@@ -74,7 +79,7 @@ public class TaskController {
                 .map(taskOutputMapper::objToDto);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
-
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/performer/{id}")
     public ResponseEntity<Slice<TaskOutDto>> tasksByPerformerId(
             @PathVariable("id") long id,
@@ -87,6 +92,7 @@ public class TaskController {
     }
 
     //здесь в dto есть author, однако мы его игнорируем и берем из аутентификации
+    @SecurityRequirement(name = "JWT")
     @PostMapping()
     public ResponseEntity<HttpStatus> createTask(@Valid @RequestBody TaskDto taskDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -101,7 +107,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //TODO добавить еще один ид
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/{id}")
     public ResponseEntity<TaskOutDto> getTask(@PathVariable("id") long id) {
         try {
@@ -112,7 +118,7 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
+    @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTask(@PathVariable("id") long id) {
         try {
@@ -129,7 +135,7 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
+    @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> changeTask(@PathVariable("id") long id,
                                                  @Valid @RequestBody TaskDto taskDto) {
@@ -152,7 +158,7 @@ public class TaskController {
         }
     }
 
-    //todo добавить валидацию(проверку на правильность входящих dto)
+    @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}/comments")
     public ResponseEntity<HttpStatus> addComment(@PathVariable("id") long id,
                                                  @Valid @RequestBody CommentDto commentDto) {
@@ -171,7 +177,7 @@ public class TaskController {
         }
     }
 
-    //TODO узнать как делать dto в таком случае, мб чекнуть алишева
+    @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}/comments/{cid}")
     public ResponseEntity<HttpStatus> deleteComment(@PathVariable("id") long id,
                                                     @PathVariable("cid") long cid) {
