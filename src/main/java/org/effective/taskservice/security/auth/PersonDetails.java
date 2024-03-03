@@ -20,7 +20,6 @@ public class PersonDetails implements UserDetails {
     private Person person;
 
 
-
     @Override
     public String getPassword() {
         return person.getPassword();

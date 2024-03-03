@@ -47,13 +47,13 @@ public class TaskController {
     private final CommentMapper commentMapper;
 
     @Autowired
-    public TaskController(TaskService taskService, PersonService personService, CommentService commentService) {
+    public TaskController(TaskService taskService, PersonService personService, CommentService commentService, TaskMapper taskMapper, TaskOutMapper taskOutputMapper, CommentMapper commentMapper) {
         this.taskService = taskService;
         this.personService = personService;
         this.commentService = commentService;
-        taskOutputMapper = Mappers.getMapper(TaskOutMapper.class);
-        taskMapper = Mappers.getMapper(TaskMapper.class);
-        commentMapper = Mappers.getMapper(CommentMapper.class);
+        this.taskMapper = taskMapper;
+        this.taskOutputMapper = taskOutputMapper;
+        this.commentMapper = commentMapper;
     }
 
     //todo фильтрация
@@ -91,7 +91,6 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    //здесь в dto есть author, однако мы его игнорируем и берем из аутентификации
     @SecurityRequirement(name = "JWT")
     @PostMapping()
     public ResponseEntity<HttpStatus> createTask(@Valid @RequestBody TaskDto taskDto) {

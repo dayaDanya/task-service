@@ -1,4 +1,4 @@
-package org.effective.taskservice.security.auth;
+package org.effective.taskservice.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.effective.taskservice.security.auth.AuthenticationService;
 import org.effective.taskservice.security.dto.AuthenticationRequest;
 import org.effective.taskservice.security.dto.AuthenticationResponse;
 import org.effective.taskservice.security.dto.RegisterRequest;
@@ -20,12 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
-
-    @GetMapping("/hello")
-    public ResponseEntity<String> register() {
-        return ResponseEntity.ok("response");
-
-    }
 
     private final AuthenticationService service;
     @Operation(
@@ -50,10 +45,7 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
     ) {
 
-            System.out.println("we r here");
             AuthenticationResponse response = service.authenticate(request);
             return ResponseEntity.ok(response);
-
-
     }
 }

@@ -1,4 +1,4 @@
-package org.effective.taskservice.util.openapi;
+package org.effective.taskservice.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
