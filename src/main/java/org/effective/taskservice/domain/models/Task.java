@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.effective.taskservice.domain.enums.TaskPriority;
 import org.effective.taskservice.domain.enums.TaskStatus;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 /**
@@ -19,7 +20,7 @@ import java.util.List;
 @Table(schema = "entities", name = "task")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Task {
+public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -40,7 +41,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "performer_id")
     private Person performer;
-    @OneToMany(mappedBy = "task", orphanRemoval = true)
+    @OneToMany(mappedBy = "task", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Comment> comments;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")

@@ -111,6 +111,7 @@ public class TaskController {
     public ResponseEntity<TaskOutDto> getTask(@PathVariable("id") long id) {
         try {
             Task task = taskService.findById(id);
+
             TaskOutDto taskOutputDto = taskOutputMapper.objToDto(task);
             return new ResponseEntity<>(taskOutputDto, HttpStatus.OK);
         } catch (TaskNotFoundException e) {
@@ -134,6 +135,7 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    //todo c
     @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> changeTask(@PathVariable("id") long id,

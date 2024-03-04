@@ -2,15 +2,13 @@ package org.effective.taskservice.domain.models;
 
 import jakarta.persistence.*;
 import liquibase.ui.UIService;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.effective.taskservice.domain.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,12 +17,13 @@ import java.util.List;
  * Класс описывающий пользователя
  */
 @Data
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(schema = "entities", name="person")
-public class Person {
+public class Person implements Serializable {
 
     //TODO настроить каскадирование
     /**
