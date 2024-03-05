@@ -1,8 +1,6 @@
 package org.effective.taskservice.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,13 +10,14 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Исходящий комментарий")
 public class CommentOutDto {
-
+    @Schema(description = "Идентификатор комментария")
     private long id;
-
+    @Schema(description = "Автор комментария")
     private String author;
-
+    @Schema(description = "Текст комментария")
     private String text;
-
+    @Schema(description = "Дата создания")
     private LocalDateTime creationDate;
 }

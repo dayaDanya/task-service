@@ -1,5 +1,6 @@
 package org.effective.taskservice.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author dayaDanya
  */
-@Tag(name="TaskController", description="Контроллер предоставляющий эндпоинты для взаимодействие с записями Task")
+@Tag(name = "TaskController", description = "Контроллер предоставляющий эндпоинты для взаимодействие с записями Task")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -56,7 +57,10 @@ public class TaskController {
         this.commentMapper = commentMapper;
     }
 
-    //todo фильтрация
+    @Operation(
+            summary = "Получение всех записей",
+            description = "Позволяет получить все записи из БД"
+    )
     @SecurityRequirement(name = "JWT")
     @GetMapping
     public ResponseEntity<Slice<TaskOutDto>> tasks(
@@ -67,7 +71,10 @@ public class TaskController {
                 .map(taskOutputMapper::objToDto), HttpStatus.OK);
     }
 
-    //todo продумать другие варианты поиска
+    @Operation(
+            summary = "Получение всех задач по id автора",
+            description = "Позволяет получить все задачи по id автора"
+    )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/author/{id}")
     public ResponseEntity<Slice<TaskOutDto>> tasksByAuthorId(
@@ -79,6 +86,11 @@ public class TaskController {
                 .map(taskOutputMapper::objToDto);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
+
+    @Operation(
+            summary = "Получение всех задач по id исполнителя",
+            description = "Позволяет получить все задачи по id исполнителя"
+    )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/performer/{id}")
     public ResponseEntity<Slice<TaskOutDto>> tasksByPerformerId(
@@ -91,8 +103,12 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Создание новой задачи",
+            description = "Позволяет создать новую задачу"
+    )
     @SecurityRequirement(name = "JWT")
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<HttpStatus> createTask(@Valid @RequestBody TaskDto taskDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //so-so
@@ -106,6 +122,10 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Получение задачи по ее id",
+            description = "Позволяет получить задачу по ее id"
+    )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/{id}")
     public ResponseEntity<TaskOutDto> getTask(@PathVariable("id") long id) {
@@ -118,6 +138,11 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Operation(
+            summary = "Удаление задачи по ее id",
+            description = "Позволяет удалить задачу по ее id"
+    )
     @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTask(@PathVariable("id") long id) {
@@ -135,7 +160,11 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    //todo c
+
+    @Operation(
+            summary = "Изменение задачи по ее id",
+            description = "Позволяет изменить задачу по ее id"
+    )
     @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> changeTask(@PathVariable("id") long id,
@@ -158,7 +187,10 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
+    @Operation(
+            summary = "Добавление комментария к задаче по id задачи",
+            description = "Позволяет оставить комментарий под задачей"
+    )
     @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}/comments")
     public ResponseEntity<HttpStatus> addComment(@PathVariable("id") long id,
@@ -177,7 +209,10 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
+    @Operation(
+            summary = "Удаление комментария",
+            description = "Позволяет удалить комментарий под задачей"
+    )
     @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}/comments/{cid}")
     public ResponseEntity<HttpStatus> deleteComment(@PathVariable("id") long id,
