@@ -1,18 +1,13 @@
 package org.effective.taskservice.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.effective.taskservice.security.auth.AuthenticationService;
-import org.effective.taskservice.security.dto.AuthenticationRequest;
-import org.effective.taskservice.security.dto.AuthenticationResponse;
-import org.effective.taskservice.security.dto.RegisterRequest;
-import org.effective.taskservice.util.exceptions.EmailNotUniqueException;
-import org.effective.taskservice.util.exceptions.PersonNotFoundException;
-import org.springframework.http.HttpStatus;
+import org.effective.taskservice.domain.dto.AuthenticationRequest;
+import org.effective.taskservice.domain.dto.AuthenticationResponse;
+import org.effective.taskservice.domain.dto.RegisterRequest;
+import org.effective.taskservice.services.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package org.effective.taskservice.security.dto;
+package org.effective.taskservice.domain.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

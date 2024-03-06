@@ -3,7 +3,7 @@ package org.effective.taskservice.security.config;
 import lombok.RequiredArgsConstructor;
 import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.repositories.PersonRepo;
-import org.effective.taskservice.security.auth.PersonDetails;
+import org.effective.taskservice.security.details.PersonDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

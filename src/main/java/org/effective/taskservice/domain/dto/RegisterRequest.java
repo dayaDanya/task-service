@@ -1,4 +1,4 @@
-package org.effective.taskservice.security.dto;
+package org.effective.taskservice.domain.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RegisterRequest {
     @Schema(description = "Имя пользователя")
+    @NotEmpty
     private String username;
     @Schema(description = "Email")
     @NotEmpty

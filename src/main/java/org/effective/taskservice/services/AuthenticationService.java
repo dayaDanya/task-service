@@ -1,13 +1,13 @@
-package org.effective.taskservice.security.auth;
+package org.effective.taskservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.effective.taskservice.domain.enums.Role;
 import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.repositories.PersonRepo;
-import org.effective.taskservice.security.config.JwtService;
-import org.effective.taskservice.security.dto.AuthenticationRequest;
-import org.effective.taskservice.security.dto.AuthenticationResponse;
-import org.effective.taskservice.security.dto.RegisterRequest;
+import org.effective.taskservice.security.details.PersonDetails;
+import org.effective.taskservice.domain.dto.AuthenticationRequest;
+import org.effective.taskservice.domain.dto.AuthenticationResponse;
+import org.effective.taskservice.domain.dto.RegisterRequest;
 import org.effective.taskservice.util.exceptions.EmailNotUniqueException;
 import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;

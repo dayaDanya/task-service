@@ -1,4 +1,4 @@
-package org.effective.taskservice.security.config;
+package org.effective.taskservice.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

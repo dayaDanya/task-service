@@ -18,7 +18,6 @@ import org.effective.taskservice.util.exceptions.TaskNotFoundException;
 import org.effective.taskservice.util.mappers.CommentMapper;
 import org.effective.taskservice.util.mappers.TaskMapper;
 import org.effective.taskservice.util.mappers.TaskOutMapper;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;

@@ -1,4 +1,4 @@
-package org.effective.taskservice.security.dto;
+package org.effective.taskservice.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

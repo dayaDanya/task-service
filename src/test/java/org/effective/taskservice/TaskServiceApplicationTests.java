@@ -25,9 +25,6 @@ class TaskServiceApplicationTests {
 	private TaskRepo taskRepo;
 
 	@Test
-	void contextLoads() {
-	}
-	@Test
 	void findById_cachingCorrectly(){
 		final long taskId = 3L;
 		taskService.findById(taskId);

@@ -1,7 +1,6 @@
-package org.effective.taskservice.util.validation;
+package org.effective.taskservice.validation;
 
 import jakarta.validation.ConstraintViolationException;
-import org.effective.taskservice.security.dto.AuthenticationResponse;
 import org.effective.taskservice.util.exceptions.EmailNotUniqueException;
 import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.effective.taskservice.util.exceptions.TaskNotFoundException;

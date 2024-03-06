@@ -41,11 +41,9 @@ public class TaskService {
         Person performer =
                 personService.findByEmail(
                         task.getPerformer().getEmail());
-
         task.setAuthor(author);
         task.setPerformer(performer);
         task.setCreationDate(LocalDateTime.now());
-        System.out.println(task.getPerformer().getEmail());
         taskRepo.save(task);
     }
     @Cacheable(value = "tasks", key = "#id")

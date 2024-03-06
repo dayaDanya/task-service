@@ -1,4 +1,4 @@
-package org.effective.taskservice.security.auth;
+package org.effective.taskservice.security.details;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PersonDetails implements UserDetails {
     private Person person;
-
 
     @Override
     public String getPassword() {

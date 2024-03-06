@@ -1,4 +1,4 @@
-package org.effective.taskservice.util.validation;
+package org.effective.taskservice.validation;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
