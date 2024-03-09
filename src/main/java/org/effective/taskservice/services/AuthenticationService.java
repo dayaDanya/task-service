@@ -56,7 +56,7 @@ public class AuthenticationService {
                 .person(user)
                 .build());
         return AuthenticationResponse.builder()
-                .response(jwtToken)
+                .token(jwtToken)
                 .build();
     }
 
