@@ -4,6 +4,7 @@ import org.effective.taskservice.domain.models.Comment;
 import org.effective.taskservice.repositories.CommentRepo;
 import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -14,11 +15,12 @@ public class CommentService {
     public CommentService(CommentRepo commentRepo) {
         this.commentRepo = commentRepo;
     }
-
+    @Transactional
     public void save(Comment comment){
         comment.setCreationDate(LocalDateTime.now());
         commentRepo.save(comment);
     }
+    @Transactional
     public void delete(long id){
         commentRepo.deleteById(id);
     }

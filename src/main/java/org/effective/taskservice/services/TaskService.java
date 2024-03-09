@@ -34,6 +34,7 @@ public class TaskService {
         return taskRepo.findAllSlice(pageable);
     }
     @CacheEvict(value = "tasks", key = "#task.id")
+    @Transactional
     public void save(Task task) throws PersonNotFoundException {
         Person author =
                 personService.findByEmail(
@@ -50,6 +51,7 @@ public class TaskService {
     public Task findById(long id) throws TaskNotFoundException {
         return taskRepo.findById(id).orElseThrow(TaskNotFoundException::new);
     }
+    @Transactional
     @CacheEvict(value = "tasks", key = "#id")
     public void delete(long id) {
         taskRepo.deleteById(id);
