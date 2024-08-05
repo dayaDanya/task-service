@@ -3,7 +3,7 @@ package org.effective.taskservice.controllers;
 import org.effective.taskservice.domain.dto.RegisterRequest;
 import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.repositories.PersonRepo;
-import org.effective.taskservice.services.AuthenticationService;
+import org.effective.taskservice.services.implementations.AuthenticationServiceImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ class AuthenticationControllerTestIT {
     @Autowired
     private PersonRepo personRepo;
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationServiceImpl authenticationService;
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
             "postgres:15-alpine"
     );

@@ -1,69 +1,21 @@
 package org.effective.taskservice.services;
 
-import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.domain.models.Task;
-import org.effective.taskservice.repositories.TaskRepo;
 import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.effective.taskservice.util.exceptions.TaskNotFoundException;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+public interface TaskService {
+    Slice<Task> findAllSlice(Pageable pageable);
 
-/**
- * @author dayaDanya
- */
-@Service
-@Transactional
-public class TaskService {
-    private final TaskRepo taskRepo;
+    void save(Task task) throws PersonNotFoundException;
 
-    private final PersonService personService;
+    Task findById(long id) throws TaskNotFoundException;
 
-    public TaskService(TaskRepo taskRepo, PersonService personService) {
-        this.taskRepo = taskRepo;
+    void delete(long id);
 
-        this.personService = personService;
-    }
+    Slice<Task> findByAuthorId(long id, Pageable pageable);
 
-    public Slice<Task> findAllSlice(Pageable pageable) {
-        return taskRepo.findAllSlice(pageable);
-    }
-    @CacheEvict(value = "tasks", key = "#task.id")
-    @Transactional
-    public void save(Task task) throws PersonNotFoundException {
-        Person author =
-                personService.findByEmail(
-                        task.getAuthor().getEmail());
-        Person performer =
-                personService.findByEmail(
-                        task.getPerformer().getEmail());
-        task.setAuthor(author);
-        task.setPerformer(performer);
-        task.setCreationDate(LocalDateTime.now());
-        taskRepo.save(task);
-    }
-    @Cacheable(value = "tasks", key = "#id")
-    public Task findById(long id) throws TaskNotFoundException {
-        return taskRepo.findById(id).orElseThrow(TaskNotFoundException::new);
-    }
-    @Transactional
-    @CacheEvict(value = "tasks", key = "#id")
-    public void delete(long id) {
-        taskRepo.deleteById(id);
-    }
-
-    //TODO проверить исключения
-    public Slice<Task> findByAuthorId(long id, Pageable pageable) {
-        return taskRepo.findByAuthorId(id, pageable);
-    }
-
-    public Slice<Task> findByPerformerId(long id, Pageable pageable) {
-        return taskRepo.findByPerformerId(id, pageable);
-    }
-
+    Slice<Task> findByPerformerId(long id, Pageable pageable);
 }

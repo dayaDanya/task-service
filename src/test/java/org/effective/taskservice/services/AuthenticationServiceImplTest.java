@@ -6,6 +6,8 @@ import org.effective.taskservice.domain.enums.Role;
 import org.effective.taskservice.domain.models.Person;
 import org.effective.taskservice.repositories.PersonRepo;
 import org.effective.taskservice.security.details.PersonDetails;
+import org.effective.taskservice.services.implementations.AuthenticationServiceImpl;
+import org.effective.taskservice.services.implementations.JwtServiceImpl;
 import org.effective.taskservice.util.exceptions.EmailNotUniqueException;
 import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,17 +25,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AuthenticationServiceTest {
+class AuthenticationServiceImplTest {
     @Mock
     PersonRepo personRepo;
     @Mock
     PasswordEncoder passwordEncoder;
     @Mock
-    JwtService jwtService;
+    JwtServiceImpl jwtService;
     @Mock
     AuthenticationManager authenticationManager;
     @InjectMocks
-    AuthenticationService authService;
+    AuthenticationServiceImpl authService;
     @DisplayName(value = "Регистрация: уникальный email - возвращает токен")
     @Test
     void register_newEmail_returnsToken() {

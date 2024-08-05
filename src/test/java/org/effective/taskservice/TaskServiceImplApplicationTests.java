@@ -1,7 +1,7 @@
 package org.effective.taskservice;
 
 import org.effective.taskservice.repositories.TaskRepo;
-import org.effective.taskservice.services.TaskService;
+import org.effective.taskservice.services.implementations.TaskServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,13 +12,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-class TaskServiceApplicationTests {
+class TaskServiceImplApplicationTests {
 
 	@Autowired
 	private ApplicationContext applicationContext;
 
 	@Autowired
-	private TaskService taskService;
+	private TaskServiceImpl taskService;
 
 	@SpyBean
 	@Autowired

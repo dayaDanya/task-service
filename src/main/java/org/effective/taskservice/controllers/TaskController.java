@@ -13,6 +13,9 @@ import org.effective.taskservice.domain.models.Task;
 import org.effective.taskservice.services.CommentService;
 import org.effective.taskservice.services.PersonService;
 import org.effective.taskservice.services.TaskService;
+import org.effective.taskservice.services.implementations.CommentServiceImpl;
+import org.effective.taskservice.services.implementations.PersonServiceImpl;
+import org.effective.taskservice.services.implementations.TaskServiceImpl;
 import org.effective.taskservice.util.exceptions.PersonNotFoundException;
 import org.effective.taskservice.util.exceptions.TaskNotFoundException;
 import org.effective.taskservice.util.mappers.CommentMapper;
@@ -47,7 +50,7 @@ public class TaskController {
     private final CommentMapper commentMapper;
 
     @Autowired
-    public TaskController(TaskService taskService, PersonService personService, CommentService commentService, TaskMapper taskMapper, TaskOutMapper taskOutputMapper, CommentMapper commentMapper) {
+    public TaskController(TaskServiceImpl taskService, PersonServiceImpl personService, CommentServiceImpl commentService, TaskMapper taskMapper, TaskOutMapper taskOutputMapper, CommentMapper commentMapper) {
         this.taskService = taskService;
         this.personService = personService;
         this.commentService = commentService;
