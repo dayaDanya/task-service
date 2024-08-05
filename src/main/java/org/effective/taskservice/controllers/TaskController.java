@@ -113,7 +113,6 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<HttpStatus> createTask(@Valid @RequestBody TaskDto taskDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //so-so
         taskDto.setAuthor(new PersonDto(authentication.getName()));
         Task task = taskMapper.dtoToObj(taskDto);
         try {

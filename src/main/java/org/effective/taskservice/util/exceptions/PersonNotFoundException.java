@@ -1,7 +1,5 @@
 package org.effective.taskservice.util.exceptions;
 
-import javax.swing.*;
-
 public class PersonNotFoundException extends RuntimeException{
     private String field;
     public PersonNotFoundException(String field) {

@@ -3,7 +3,6 @@ package org.effective.taskservice.config;
 import org.effective.taskservice.util.mappers.CommentMapper;
 import org.effective.taskservice.util.mappers.TaskMapper;
 import org.effective.taskservice.util.mappers.TaskOutMapper;
-import org.effective.taskservice.util.mappers.TaskOutMapperImpl;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
